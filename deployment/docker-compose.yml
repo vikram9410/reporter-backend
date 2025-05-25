@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Backend API service
+  backend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: production
+    container_name: road-safety-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=road_safety_db
+    volumes:
+      - ../uploads:/usr/src/app/uploads
+    depends_on:
+      - mysql
+    networks:
+      - road_safety_network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: road-safety-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: road_safety_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - road_safety_network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Adminer for database management (optional)
+  adminer:
+    image: adminer
+    container_name: road-safety-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - road_safety_network
+
+networks:
+  road_safety_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local 

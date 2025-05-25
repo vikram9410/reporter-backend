@@ -1,0 +1,35 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build files
+dist
+build
+
+# Environment
+.env
+.env.*
+
+# Git and version control
+.git
+.gitignore
+
+# Docker related
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE files
+.idea
+.vscode
+*.sublime-*
+*.swp
+*.swo
+
+# Uploads (will be mounted as volume)
+uploads/*
+
+# Tests
+coverage
+.nyc_output
+test 
